@@ -1,17 +1,16 @@
 # turbo_winrate
 
-## analyzer.py now takes terminal arguments, see help info.
-## need to change line 1 and line 12 to in analyzer to your corresponding paths to run 
+## Notes
+1. analyzer.py now takes terminal arguments, see help info.
+2. need to update [api_key_steam.txt](resources/api_key_steam.txt) for steam api calls to work.
 
-# Help Info:
-        use -w {heroid|heroname} or -winrate {heroid|heroname} to check a hero's winrate in turbo
-        example: analyzer.py -w 2
-        example: analyzer.py -w terror
-        
-        use -a or -all to print out all heroes' wr in turbo
-        example: analyzer.py -a
-        
-        use -c {heroid|heroname} or -counter {heroid|heroname} to check what counters a hero in turbo
-        example: analyzer.py -c 2
-        example: analyzer.py -c ogre
-        """
+## Sample usage
+
+```
+cd src
+venv/bin/python __init__.py download -a
+venv/bin/python __init__.py winrate -a
+venv/bin/python __init__.py winrate -h 2
+venv/bin/python __init__.py counter -h 2
+venv/bin/python __init__.py counter -h terror
+```
