@@ -23,12 +23,11 @@ class Analyzer:
                     'hero5', 'hero6', 'hero7', 'hero8', 'hero9']
         if not isinstance(fpath, list):
             fpath = [fpath]
-        frames = [_pd.read_csv(f, names=colnames, header=None) for f in fpath]
-        self.df = _pd.concat(frames, ignore_index=True)
-        # radiant_win can be -1 due to steam API response empty
-        self.df = self.df.loc[self.df.radiant_win >= 0 and self.df.lobby_type == 0, :]
+        query = 'lobby_type == 0'
         if turbo_only:
-            self.df = self.df.loc[self.df.game_mode == 23, :]
+            query += 'and game_mode == 23'
+        frames = [_pd.read_csv(f, names=colnames, header=None, dtype={'radiant_win': 'boolean'}).query(query) for f in fpath]
+        self.df = _pd.concat(frames, ignore_index=True)
         self.fill_match_up_table()
 
     def fill_match_up_table(self):
