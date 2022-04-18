@@ -6,6 +6,7 @@ created on: 2022/04/15
 
 import json as _json
 import os as _os
+from collections import defaultdict
 from time import ctime as _ctime
 from time import sleep as _sleep
 
@@ -46,7 +47,7 @@ class DataDownloader():
         api_path += f"&match_id={match_id}"
         response_raw = self.session.get(api_path, timeout=5)
         response_raw.raise_for_status()
-        mdict = _json.loads(response_raw.content)['result']
+        mdict = defaultdict(lambda: -1, _json.loads(response_raw.content)['result'])
         match_level_info = [mdict['match_id'], mdict['duration'], mdict['game_mode'], mdict['lobby_type'],
                             mdict['human_players'], mdict['start_time'], mdict['radiant_win']]
         hero_info = [mdict['players'][i]['hero_id'] for i in range(10)]

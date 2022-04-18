@@ -25,7 +25,8 @@ class Analyzer:
             fpath = [fpath]
         frames = [_pd.read_csv(f, names=colnames, header=None) for f in fpath]
         self.df = _pd.concat(frames, ignore_index=True)
-        self.df = self.df.loc[self.df.lobby_type == 0, :]
+        # radiant_win can be -1 due to steam API response empty
+        self.df = self.df.loc[self.df.radiant_win >= 0 and self.df.lobby_type == 0, :]
         if turbo_only:
             self.df = self.df.loc[self.df.game_mode == 23, :]
         self.fill_match_up_table()
