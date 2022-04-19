@@ -1,8 +1,8 @@
 import click
 
-from analyzer import *
-from downloader import *
-from utils import *
+from .analyzer import *
+from .downloader import *
+from .utils import *
 
 
 @click.group()

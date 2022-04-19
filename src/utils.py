@@ -5,9 +5,11 @@ created on: 2022/04/15
 """
 import json as _json
 import re as _re
+import pathlib as _pathlib
 
-
-def get_heroid_dict(hero_path="../resources/heroinfo.json"):
+def get_heroid_dict(hero_path=None):
+    if not hero_path:
+        hero_path = _pathlib.Path(__file__).parent.parent / "resources/heroinfo.json"
     with open(hero_path) as f:
         herojson = f.readlines()
     hero_json_dict = _json.loads(herojson[0])

@@ -2,7 +2,7 @@
 # change the line above to your python path
 """
 Load and analyze match data
-author: bradicator
+author: bradicator, wangenze
 created on: 2022/04/15
 """
 
@@ -11,18 +11,22 @@ from itertools import product as _product
 import numpy as _np
 import pandas as _pd
 
-from utils import *
+from .utils import *
 
 
 class Analyzer:
     def __init__(self, fpath, turbo_only=True):
         self.hdict = get_heroid_dict()
+        if not isinstance(fpath, list):
+            fpath = [fpath]
+        if fpath[0].split('.')[-1] == "npy":
+            self.mutable = _np.load(fpath[0])
+            return
         colnames = ['match_id', 'duration', 'game_mode', 'lobby_type',
                     'human_players', 'start_time', 'radiant_win',
                     'hero0', 'hero1', 'hero2', 'hero3', 'hero4',
                     'hero5', 'hero6', 'hero7', 'hero8', 'hero9']
-        if not isinstance(fpath, list):
-            fpath = [fpath]
+        
         query = 'lobby_type == 0'
         if turbo_only:
             query += 'and game_mode == 23'
@@ -38,7 +42,12 @@ class Analyzer:
                     self.mutable[r[f'hero{i}'], r[f'hero{j}']] += 1
                 else:
                     self.mutable[r[f'hero{j}'], r[f'hero{i}']] += 1
-
+    
+    def save_match_up_table(self, fname):
+        if fname[-4:] != ".npy":
+            raise RuntimeError("must save as .npy file")
+        _np.save(fname, self.mutable)
+        
     def get_hero_winrate(self, heroid):
         nwin = _np.sum(self.mutable[heroid, :])
         nloss = _np.sum(self.mutable[:, heroid])
